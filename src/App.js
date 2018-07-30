@@ -6,9 +6,10 @@ class App extends Component {
     return (
       <div className="app">
         <Clock
-          player1TotalDuration={100000}
-          player2TotalDuration={100000}
+          player1Duration={100000}
+          player2Duration={100000}
           refreshPeriod={200}
+          increment={10000}
         />
       </div>
     );

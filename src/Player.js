@@ -9,11 +9,13 @@ class Player extends Component {
     super();
   }
   render() {
-    const timeLeft = this.props.totalDuration - this.props.spentDuration + 50;
+    const timeLeft = this.props.duration - this.props.elapsed + 50;
     const momentLeft = moment
       .duration(timeLeft)
       .format("mm:ss", { trim: false });
-    const proportion = timeLeft / this.props.totalDuration;
+    const proportion =
+      Math.min(timeLeft, this.props.originalDuration) /
+      this.props.originalDuration;
     const playerClassName = classnames("player", {
       active: this.props.active,
     });

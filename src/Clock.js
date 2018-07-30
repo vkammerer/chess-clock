@@ -4,15 +4,8 @@ import Player from "./Player";
 const defaultState = {
   moves: [],
   currentPlayer: 1,
-  currentStart: null,
-  player1Elapsed: 0,
-  player2Elapsed: 0,
+  currentMoveStart: null,
 };
-
-const getMovesDuration = (moves, player) =>
-  moves
-    .filter(p => p.player === player)
-    .reduce((acc, p) => acc + p.end - p.start, 0);
 
 class Clock extends Component {
   constructor(props) {
@@ -23,93 +16,105 @@ class Clock extends Component {
     this.switch = this.switch.bind(this);
     this.play = this.play.bind(this);
     this.pause = this.pause.bind(this);
-    this.togglePausePlay = this.togglePausePlay.bind(this);
-    this.getSpentTime = this.getSpentTime.bind(this);
-    this.getNextTickDelay = this.getNextTickDelay.bind(this);
+    this.togglePlayPause = this.togglePlayPause.bind(this);
+    this.getTurns = this.getTurns.bind(this);
+    this.getDuration = this.getDuration.bind(this);
+    this.getElapsed = this.getElapsed.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
   }
   reset() {
     clearTimeout(this.tickTimeout);
     this.setState(defaultState);
   }
-  getSpentTime(now) {
-    if (!this.state.currentStart) return 0;
-    const movesDuration = getMovesDuration(
-      this.state.moves,
-      this.state.currentPlayer,
-    );
-    return now - this.state.currentStart + movesDuration;
-  }
-  getNextTickDelay(spentTime) {
-    return this.props.refreshPeriod - (spentTime % this.props.refreshPeriod);
-  }
   tick() {
-    clearTimeout(this.tickTimeout);
-    const now = Date.now();
-    const spentTime = this.getSpentTime(now);
-    const nextTickDelay = this.getNextTickDelay(spentTime);
-    this.tickTimeout = setTimeout(this.tick, nextTickDelay);
-    const playerElapsed =
-      this.state.currentPlayer === 1 ? "player1Elapsed" : "player2Elapsed";
-    this.setState({ [playerElapsed]: spentTime });
+    this.setState({ now: Date.now() });
   }
   play() {
-    clearTimeout(this.tickTimeout);
     const now = Date.now();
-    const spentTime = this.getSpentTime(now);
-    const nextTickDelay = this.getNextTickDelay(spentTime);
-    this.tickTimeout = setTimeout(this.tick, nextTickDelay);
     this.setState({
-      currentStart: now,
+      now,
+      currentMoveStart: now,
     });
   }
   pause() {
     clearTimeout(this.tickTimeout);
-    const now = Date.now();
-    const moves = [
-      ...this.state.moves,
-      {
-        player: this.state.currentPlayer,
-        start: this.state.currentStart,
-        end: now,
-      },
-    ];
     this.setState({
-      moves,
-      currentStart: null,
+      moves: [
+        ...this.state.moves,
+        {
+          player: this.state.currentPlayer,
+          start: this.state.currentMoveStart,
+          end: Date.now(),
+        },
+      ],
+      currentMoveStart: null,
     });
   }
-  togglePausePlay() {
-    if (this.state.currentStart) this.pause();
+  togglePlayPause() {
+    if (this.state.currentMoveStart) this.pause();
     else this.play();
+  }
+  getTurns(player) {
+    return this.state.moves.filter((m, index) => {
+      const nextMove = this.state.moves[index + 1];
+      return (
+        m.player === player &&
+        ((nextMove && nextMove.player !== player) ||
+          (!nextMove && this.state.currentPlayer !== player))
+      );
+    }).length;
+  }
+  getDuration(player) {
+    const playerDuration = player === 1 ? "player1Duration" : "player2Duration";
+    return (
+      this.props[playerDuration] + this.getTurns(player) * this.props.increment
+    );
+  }
+  isMoving(player) {
+    return this.state.currentMoveStart && this.state.currentPlayer === player;
+  }
+  getElapsed(player) {
+    const movesDuration = this.state.moves
+      .filter(p => p.player === player)
+      .reduce((acc, p) => acc + p.end - p.start, 0);
+    if (this.isMoving(player))
+      return movesDuration + this.state.now - this.state.currentMoveStart;
+    return movesDuration;
   }
   switch() {
     clearTimeout(this.tickTimeout);
     const now = Date.now();
-    const moves = !this.state.currentStart
+    const moves = !this.state.currentMoveStart
       ? this.state.moves
       : [
           ...this.state.moves,
           {
             player: this.state.currentPlayer,
-            start: this.state.currentStart,
+            start: this.state.currentMoveStart,
             end: now,
           },
         ];
     const currentPlayer = this.state.currentPlayer === 1 ? 2 : 1;
-    const spentTime = getMovesDuration(moves, currentPlayer);
-    const nextTickDelay = this.getNextTickDelay(spentTime);
-    this.tickTimeout = setTimeout(this.tick, nextTickDelay);
     this.setState({
       moves,
       currentPlayer,
-      currentStart: now,
+      now,
+      currentMoveStart: now,
     });
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.now !== this.state.now) {
+      const elapsed = this.getElapsed(this.state.currentPlayer);
+      const nextTickDelay =
+        this.props.refreshPeriod - (elapsed % this.props.refreshPeriod);
+      clearTimeout(this.tickTimeout);
+      this.tickTimeout = setTimeout(this.tick, nextTickDelay);
+    }
   }
   handleKeyPress(event) {
     const keyCode = event.keyCode;
     if (keyCode === 32) this.switch();
-    if (keyCode === 112) this.togglePausePlay();
+    if (keyCode === 112) this.togglePlayPause();
     if (keyCode === 114) this.reset();
   }
   componentDidMount() {
@@ -125,8 +130,9 @@ class Clock extends Component {
           <div />
           <Player
             name="Vincent"
-            totalDuration={this.props.player1TotalDuration}
-            spentDuration={this.state.player1Elapsed}
+            originalDuration={this.props.player1Duration}
+            duration={this.getDuration(1)}
+            elapsed={this.getElapsed(1)}
             refreshPeriod={this.props.refreshPeriod}
             active={this.state.currentPlayer === 1}
           />
@@ -137,8 +143,9 @@ class Clock extends Component {
           </div>
           <Player
             name="Didier"
-            totalDuration={this.props.player2TotalDuration}
-            spentDuration={this.state.player2Elapsed}
+            originalDuration={this.props.player2Duration}
+            duration={this.getDuration(2)}
+            elapsed={this.getElapsed(2)}
             refreshPeriod={this.props.refreshPeriod}
             active={this.state.currentPlayer === 2}
           />
@@ -146,8 +153,8 @@ class Clock extends Component {
         </main>
         <footer>
           <div className="buttons">
-            <div onClick={this.togglePausePlay}>
-              {this.state.currentStart ? "Pause" : "Play"} (P)
+            <div onClick={this.togglePlayPause}>
+              {this.state.currentMoveStart ? "Pause" : "Play"} (P)
             </div>
             <div onClick={this.reset}>Reset (R)</div>
           </div>
