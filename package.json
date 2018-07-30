@@ -17,5 +17,6 @@
   },
   "devDependencies": {
     "moment-duration-format": "^2.2.2"
-  }
+  },
+  "homepage": "."
 }
