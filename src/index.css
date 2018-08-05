@@ -32,7 +32,7 @@ body {
   display: grid;
   height: 100vh;
   grid-template-columns: 100%;
-  grid-template-rows: calc(30px + 4rem) auto calc(30px + 4rem);
+  grid-template-rows: calc(42px + 1.5rem) auto calc(42px + 1.5rem);
 }
 header,
 footer {
@@ -56,7 +56,7 @@ footer {
 .buttons > div {
   border: 2px solid black;
   border-radius: 0.2rem;
-  line-height: 300%;
+  line-height: 260%;
   text-align: center;
   background: #ddd;
   white-space: nowrap;
@@ -155,15 +155,15 @@ html.players_10 main {
   display: inline-block;
   position: relative;
   text-align: center;
-  width: 4rem;
+  width: 4em;
   padding-top: 1rem;
-  margin-left: -2rem;
-  font-size: calc(8px + 0.5rem);
+  margin-left: -2em;
+  font-size: calc(6px + 0.8rem);
 }
 .progressLegend span:last-child {
   float: right;
   margin-left: 0;
-  margin-right: -2rem;
+  margin-right: -2em;
 }
 .player.overtime .progressLegend span:last-child:after {
   content: "+";
