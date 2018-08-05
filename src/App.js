@@ -3,6 +3,7 @@ import Clock from "./Clock";
 
 const defaultPlayer = {
   total: 5 * 60 * 1000,
+  increment: 0,
 };
 const defaultPlayers = [
   {
@@ -28,6 +29,7 @@ class App extends Component {
     };
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleMinutesChange = this.handleMinutesChange.bind(this);
+    this.handleIncrementSelection = this.handleIncrementSelection.bind(this);
     this.addPlayer = this.addPlayer.bind(this);
   }
   handleNameChange(index, name) {
@@ -38,6 +40,11 @@ class App extends Component {
   handleMinutesChange(index, delta) {
     const players = [...this.state.players];
     players[index].total = players[index].total + delta * 60 * 1000;
+    this.setState({ players });
+  }
+  handleIncrementSelection(index, increment) {
+    const players = [...this.state.players];
+    players[index].increment = increment;
     this.setState({ players });
   }
   addPlayer() {
@@ -56,9 +63,9 @@ class App extends Component {
         <Clock
           players={this.state.players}
           refreshPeriod={1000}
-          increment={5000}
           handleNameChange={this.handleNameChange}
           handleMinutesChange={this.handleMinutesChange}
+          handleIncrementSelection={this.handleIncrementSelection}
           addPlayer={this.addPlayer}
         />
       </div>

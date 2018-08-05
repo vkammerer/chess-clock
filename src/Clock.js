@@ -143,7 +143,9 @@ class Clock extends Component {
     return this.props.players[playerIndex].total;
   }
   getBonus(playerIndex) {
-    return this.getTurns(playerIndex) * this.props.increment;
+    return (
+      this.getTurns(playerIndex) * this.props.players[playerIndex].increment
+    );
   }
   getElapsed(playerIndex, includePending) {
     const moves = includePending
@@ -196,6 +198,7 @@ class Clock extends Component {
               index={i}
               key={i}
               total={p.total}
+              increment={p.increment}
               bonus={this.getBonus(i)}
               elapsed={this.getElapsed(i, true)}
               tickedElapsed={this.getElapsed(i)}
@@ -204,6 +207,7 @@ class Clock extends Component {
               playing={this.state.currentMoveStart !== null}
               handleNameChange={this.props.handleNameChange}
               handleMinutesChange={this.props.handleMinutesChange}
+              handleIncrementSelection={this.props.handleIncrementSelection}
             />
           ))}
         </main>
@@ -212,7 +216,7 @@ class Clock extends Component {
             <div onClick={this.togglePlayPause}>
               {this.state.currentMoveStart ? "Pause" : "Play"} (P)
             </div>
-            <div onClick={this.switch}>Switch (Space)</div>
+            <div onClick={this.switch}>Next (Space)</div>
             <div onClick={this.reset}>Reset (R)</div>
           </div>
         </footer>

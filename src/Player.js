@@ -17,6 +17,7 @@ class Player extends PureComponent {
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handlePlusClick = this.handlePlusClick.bind(this);
     this.handleMinusClick = this.handleMinusClick.bind(this);
+    this.handleIncrementSelection = this.handleIncrementSelection.bind(this);
   }
   handleNameChange(evt) {
     this.props.handleNameChange(this.props.index, evt.target.value);
@@ -29,6 +30,12 @@ class Player extends PureComponent {
   }
   onNameFocus() {
     setTimeout(() => document.execCommand("selectAll", false, null), 0);
+  }
+  handleIncrementSelection(event) {
+    this.props.handleIncrementSelection(
+      this.props.index,
+      parseInt(event.target.value, 10),
+    );
   }
   render() {
     const playerClassName = classnames("player", {
@@ -74,17 +81,29 @@ class Player extends PureComponent {
             <div onClick={this.handleMinusClick}>-</div>
           </div>
         </div>
-        <div className="progressContainer">
-          <div className="progress">
-            <div className="progressBar" style={progressStyle} />
-            <div className="progressLegend">
-              <span>0</span>
-              <span>
-                {totalMoment[0]}
-                :
-                {totalMoment[1]}
-              </span>
-            </div>
+        <div className="progress">
+          <div className="progressBar">
+            <div className="progressBarBg" style={progressStyle} />
+          </div>
+          <div className="increment">
+            <select
+              value={this.props.increment}
+              onChange={this.handleIncrementSelection}
+            >
+              <option value={0}>+ 0s / move</option>
+              <option value={5000}>+ 5s / move</option>
+              <option value={10000}>+ 10s / move</option>
+              <option value={20000}>+ 20s / move</option>
+              <option value={30000}>+ 30s / move</option>
+            </select>
+          </div>
+          <div className="progressLegend">
+            <span>0</span>
+            <span>
+              {totalMoment[0]}
+              :
+              {totalMoment[1]}
+            </span>
           </div>
         </div>
       </div>
