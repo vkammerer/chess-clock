@@ -32,9 +32,14 @@ body {
   display: grid;
   height: 100vh;
   grid-template-columns: 100%;
-  grid-template-rows: 7rem auto 7rem;
+  grid-template-rows: calc(30px + 4rem) auto calc(30px + 4rem);
 }
-header {
+header,
+footer {
+  background: #444;
+  box-shadow: 0px 0px 5px 2px #0000007a;
+}
+footer {
 }
 .settings {
   height: 100%;
@@ -42,9 +47,32 @@ header {
   justify-content: space-evenly;
   align-items: center;
 }
+.buttons {
+  height: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.buttons > div {
+  border: 2px solid black;
+  border-radius: 0.2rem;
+  line-height: 300%;
+  text-align: center;
+  background: #ddd;
+  white-space: nowrap;
+  width: 10em;
+  user-select: none;
+  cursor: pointer;
+  font-size: calc(12px + 0.5rem);
+}
+
+.buttons > div:hover {
+  background: #eee;
+}
 main {
   display: grid;
   grid-template-columns: auto auto;
+  padding: 10px;
 }
 html.players_7 main {
   grid-template-columns: auto auto auto;
@@ -107,13 +135,7 @@ html.players_10 main {
   border-radius: 0.2rem;
   color: white;
   background: #444;
-  margin: 0.2rem 0;
-}
-.timeControls > div:first-child {
-  background: rgb(0, 172, 172);
-}
-.timeControls > div:last-child {
-  background: rgb(0, 87, 218);
+  margin: 0.2rem 0 0;
 }
 .progressContainer {
   width: 100%;
@@ -131,11 +153,12 @@ html.players_10 main {
 }
 .progressLegend span {
   display: inline-block;
-  padding-top: 1rem;
-  width: 4rem;
-  margin-left: -2rem;
-  text-align: center;
   position: relative;
+  text-align: center;
+  width: 4rem;
+  padding-top: 1rem;
+  margin-left: -2rem;
+  font-size: calc(8px + 0.5rem);
 }
 .progressLegend span:last-child {
   float: right;
@@ -152,27 +175,4 @@ html.players_10 main {
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-footer {
-}
-.buttons {
-  height: 100%;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-}
-.buttons > div {
-  border: 2px solid black;
-  border-radius: 0.2rem;
-  line-height: 300%;
-  text-align: center;
-  background: #ddd;
-  white-space: nowrap;
-  width: 10em;
-  user-select: none;
-  cursor: pointer;
-}
-
-.buttons > div:hover {
-  background: #eee;
 }
