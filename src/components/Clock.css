@@ -1,0 +1,56 @@
+.clock {
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 100%;
+  grid-template-rows: calc(42px + 1.5rem) auto;
+}
+header {
+  z-index: 1;
+  box-shadow: 0px 0px 5px 2px #0000007a;
+  background: #ffffff3f;
+}
+header .buttons {
+  height: calc(42px + 1.5rem);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+header .buttons.dark {
+  background: #444;
+}
+header .buttons > button {
+  border: 2px solid black;
+  border-radius: 0.2rem;
+  line-height: 260%;
+  text-align: center;
+  background: #ddd;
+  white-space: nowrap;
+  width: 10em;
+  user-select: none;
+  cursor: pointer;
+  font-size: calc(12px + 0.5rem);
+}
+
+header .buttons > div:hover {
+  background: #eee;
+}
+main {
+  display: grid;
+  grid-template-columns: auto;
+  padding: 10px;
+}
+
+html.players_2 main {
+  grid-template-columns: auto auto;
+}
+html.players_7 main {
+  grid-template-columns: auto auto auto;
+}
+html.players_10 main {
+  grid-template-columns: auto auto auto auto;
+}
+.switch {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import classnames from "classnames";
 import moment from "moment";
 import momentDurationFormatSetup from "moment-duration-format";
-import ContentEditable from "react-contenteditable";
+import "./Player.css";
 momentDurationFormatSetup(moment);
 
 const formatTime = duration =>
@@ -63,12 +63,14 @@ class Player extends PureComponent {
     };
     return (
       <div className={playerClassName}>
-        <ContentEditable
+        <input
+          type="text"
           className="name"
-          html={this.props.name}
+          value={this.props.name}
           disabled={this.props.playing}
           onChange={this.handleNameChange}
           onFocus={this.onNameFocus}
+          tabIndex={this.props.index + 1000}
         />
         <div className="time">
           <div className="timeDisplay">
@@ -89,6 +91,7 @@ class Player extends PureComponent {
             <select
               value={this.props.increment}
               onChange={this.handleIncrementSelection}
+              tabIndex={this.props.index + 2000}
             >
               <option value={0}>+ 0s / move</option>
               <option value={5000}>+ 5s / move</option>

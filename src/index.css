@@ -5,10 +5,10 @@
   html {
     font-size: 1.7vw;
   }
-  html.players_7 {
+  html.players_7 main {
     font-size: 1.2vw;
   }
-  html.players_10 {
+  html.players_10 main {
     font-size: 1vw;
   }
 }
@@ -16,10 +16,10 @@
   html {
     font-size: 2vh;
   }
-  html.players_7 {
+  html.players_7 main {
     font-size: 1.5vh;
   }
-  html.players_10 {
+  html.players_10 main {
     font-size: 1.3vh;
   }
 }
@@ -27,170 +27,4 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-}
-.clock {
-  display: grid;
-  height: 100vh;
-  grid-template-columns: 100%;
-  grid-template-rows: calc(42px + 1.5rem) auto calc(42px + 1.5rem);
-}
-header,
-footer {
-  background: #444;
-  box-shadow: 0px 0px 5px 2px #0000007a;
-}
-footer {
-}
-.settings {
-  height: 100%;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-}
-.buttons {
-  height: 100%;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-}
-.buttons > div {
-  border: 2px solid black;
-  border-radius: 0.2rem;
-  line-height: 260%;
-  text-align: center;
-  background: #ddd;
-  white-space: nowrap;
-  width: 10em;
-  user-select: none;
-  cursor: pointer;
-  font-size: calc(12px + 0.5rem);
-}
-
-.buttons > div:hover {
-  background: #eee;
-}
-main {
-  display: grid;
-  grid-template-columns: auto auto;
-  padding: 10px;
-}
-html.players_7 main {
-  grid-template-columns: auto auto auto;
-}
-html.players_10 main {
-  grid-template-columns: auto auto auto auto;
-}
-.player {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0 3rem;
-}
-.name {
-  font-size: 2rem;
-  border: 1px solid #b6b6b6;
-  padding: 0.2rem 1rem;
-  border-radius: 0.2rem;
-}
-.name:focus,
-.playing .name {
-  border-color: transparent;
-}
-.time {
-  font-size: 5rem;
-  width: 16rem;
-  text-align: center;
-  position: relative;
-}
-.player.active .timeDisplay {
-  color: rgb(194, 0, 0);
-}
-.timeDisplay span {
-  display: inline-block;
-  width: 1.05em;
-}
-.timeDisplay span:first-child {
-  text-align: right;
-}
-.timeDisplay span:last-child {
-  text-align: left;
-}
-.timeControls {
-  position: absolute;
-  right: -3rem;
-  bottom: 1rem;
-  line-height: 0.85em;
-  font-size: 1.7rem;
-}
-.playing .timeControls {
-  display: none;
-}
-.timeControls > div {
-  border: 1px solid black;
-  width: 2em;
-  height: 1em;
-  cursor: pointer;
-  user-select: none;
-  border-radius: 0.2rem;
-  color: white;
-  background: #444;
-  margin: 0.2rem 0 0;
-}
-.progress {
-  width: 100%;
-  position: relative;
-}
-.progressBar {
-  width: 100%;
-  height: 1rem;
-  border: 1px solid black;
-  border-radius: 0.2rem;
-  overflow: hidden;
-}
-.progressBarBg {
-  height: 100%;
-  background: #444;
-  transform-origin: left center;
-  transition: all linear 1s;
-}
-.active .progressBarBg {
-  background: #be0000;
-}
-.progressLegend span {
-  display: inline-block;
-  position: relative;
-  text-align: center;
-  width: 3.8em;
-  padding-top: 0.5em;
-  margin-left: -1.9em;
-  font-size: calc(6px + 0.8rem);
-}
-.progressLegend span:last-child {
-  float: right;
-  margin-left: 0;
-  margin-right: -1.9em;
-}
-.player.overtime .progressLegend span:last-child:after {
-  content: "+";
-  position: absolute;
-  bottom: 0.6em;
-  right: 0px;
-}
-.switch {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.increment {
-  text-align: center;
-  position: absolute;
-  width: 100%;
-  padding-top: 0.7rem;
-}
-.playing .increment {
-  display: none;
-}
-.increment select {
-  text-align-last: center;
 }

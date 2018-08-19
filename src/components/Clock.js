@@ -1,11 +1,15 @@
 import React, { Component } from "react";
+import classnames from "classnames";
+import "./Clock.css";
 import Player from "./Player";
+import Settings from "./Settings";
 
 const defaultState = {
   currentPlayer: 0,
   over: false,
   now: null,
   currentMoveStart: null,
+  settingsOpen: false,
 };
 
 class Clock extends Component {
@@ -29,6 +33,7 @@ class Clock extends Component {
     this.getBonus = this.getBonus.bind(this);
     this.getElapsed = this.getElapsed.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.toggleSettings = this.toggleSettings.bind(this);
   }
   reset() {
     clearTimeout(this.tickTimeout);
@@ -108,6 +113,7 @@ class Clock extends Component {
     });
   }
   togglePlayPause() {
+    console.log('togglePlayPause');
     if (this.state.currentMoveStart) this.pause();
     else this.play();
   }
@@ -171,11 +177,19 @@ class Clock extends Component {
     }
   }
   handleKeyPress(event) {
-    if (event.target.contentEditable === "true") return;
-    const keyCode = event.keyCode;
-    if (keyCode === 32) this.switch();
-    if (keyCode === 112) this.togglePlayPause();
-    if (keyCode === 114) this.reset();
+    const charCode = event.charCode;
+    if (charCode === 32) {
+      if (
+        event.target.tagName === "BUTTON" ||
+        event.target.tagName === "INPUT"
+      ) return;
+      this.switch();
+    }
+    if (charCode === 112) this.togglePlayPause();
+    if (charCode === 114) this.reset();
+  }
+  toggleSettings() {
+    this.setState({ settingsOpen: !this.state.settingsOpen });
   }
   componentDidMount() {
     document.addEventListener("keypress", this.handleKeyPress);
@@ -184,11 +198,25 @@ class Clock extends Component {
     document.removeEventListener("keypress", this.handleKeyPress);
   }
   render() {
+    const clockClassName = classnames("clock", {
+      settingsOpen: this.state.settingsOpen,
+    });
     return (
-      <div className="clock">
+      <div className={clockClassName}>
         <header>
-          <div className="settings buttons">
-            <div onClick={this.props.addPlayer}>Add player</div>
+          <div className="buttons dark">
+            <button tabIndex={1} onClick={this.togglePlayPause}>
+              {this.state.currentMoveStart ? "Pause" : "Play"} (P)
+            </button>
+            <button tabIndex={2} onClick={this.switch}>
+              Next (Space)
+            </button>
+            <button tabIndex={3} onClick={this.reset}>
+              Reset (R)
+            </button>
+            <button tabIndex={4} onClick={this.toggleSettings}>
+              {this.state.settingsOpen ? "Close settings" : "Open settings"}
+            </button>
           </div>
         </header>
         <main>
@@ -211,15 +239,13 @@ class Clock extends Component {
             />
           ))}
         </main>
-        <footer>
-          <div className="actions buttons">
-            <div onClick={this.togglePlayPause}>
-              {this.state.currentMoveStart ? "Pause" : "Play"} (P)
-            </div>
-            <div onClick={this.switch}>Next (Space)</div>
-            <div onClick={this.reset}>Reset (R)</div>
-          </div>
-        </footer>
+        <Settings
+          players={this.props.players}
+          addPlayer={this.props.addPlayer}
+          removePlayer={this.props.removePlayer}
+          settingsHarmony={this.props.settingsHarmony}
+          toggleSettingsHarmony={this.props.toggleSettingsHarmony}
+        />
       </div>
     );
   }
